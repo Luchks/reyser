@@ -1,0 +1,21 @@
+# Configuración local y secretos
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependencias (Composer las reinstala con 'composer install')
+/vendor/
+
+# Logs y archivos temporales
+/logs/
+*.log
+
+# IDEs (Configuraciones de VS Code o PHPStorm)
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

@@ -1,0 +1,444 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.tuempresa.miapp"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:5:5-66
+11-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.WAKE_LOCK" />
+12-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:23:5-68
+12-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:23:22-65
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:24:5-79
+13-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:24:22-76
+14    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+14-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:25:5-81
+14-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:25:22-78
+15    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+15-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:26:5-77
+15-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:26:22-74
+16    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+16-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:9:5-81
+16-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:9:22-78
+17    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+17-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:10:5-79
+17-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:10:22-76
+18    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+18-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:11:5-76
+18-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:11:22-73
+19
+20    <uses-feature
+20-->[com.google.android.gms:play-services-maps:17.0.0] /home/luchks/.gradle/caches/transforms-4/5c5f489c2c28ec1992cb3a0adacca1cf/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:26:5-28:35
+21        android:glEsVersion="0x00020000"
+21-->[com.google.android.gms:play-services-maps:17.0.0] /home/luchks/.gradle/caches/transforms-4/5c5f489c2c28ec1992cb3a0adacca1cf/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:27:9-41
+22        android:required="true" />
+22-->[com.google.android.gms:play-services-maps:17.0.0] /home/luchks/.gradle/caches/transforms-4/5c5f489c2c28ec1992cb3a0adacca1cf/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:28:9-32
+23
+24    <permission
+24-->[androidx.core:core:1.13.1] /home/luchks/.gradle/caches/transforms-4/49c8a5e087af293a9d6cb59a5981854a/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+25        android:name="com.tuempresa.miapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+25-->[androidx.core:core:1.13.1] /home/luchks/.gradle/caches/transforms-4/49c8a5e087af293a9d6cb59a5981854a/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+26        android:protectionLevel="signature" />
+26-->[androidx.core:core:1.13.1] /home/luchks/.gradle/caches/transforms-4/49c8a5e087af293a9d6cb59a5981854a/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+27
+28    <uses-permission android:name="com.tuempresa.miapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+28-->[androidx.core:core:1.13.1] /home/luchks/.gradle/caches/transforms-4/49c8a5e087af293a9d6cb59a5981854a/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+28-->[androidx.core:core:1.13.1] /home/luchks/.gradle/caches/transforms-4/49c8a5e087af293a9d6cb59a5981854a/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+29
+30    <application
+30-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:7:5-33:19
+31        android:allowBackup="true"
+31-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:9:9-35
+32        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+32-->[androidx.core:core:1.13.1] /home/luchks/.gradle/caches/transforms-4/49c8a5e087af293a9d6cb59a5981854a/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+33        android:debuggable="true"
+34        android:extractNativeLibs="false"
+35        android:icon="@android:drawable/ic_menu_info_details"
+35-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:10:9-62
+36        android:label=""
+36-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:11:9-25
+37        android:supportsRtl="true"
+37-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:12:9-35
+38        android:testOnly="true"
+39        android:theme="@style/Theme.Material3.DayNight.NoActionBar"
+39-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:13:9-68
+40        android:usesCleartextTraffic="true" >
+40-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:8:9-44
+41        <receiver
+41-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:15:9-21:20
+42            android:name="com.tuempresa.miapp.data.local.ShutdownReceiver"
+42-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:16:13-56
+43            android:exported="false" >
+43-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:17:13-37
+44            <intent-filter>
+44-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:18:13-20:29
+45                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+45-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:19:17-80
+45-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:19:25-77
+46            </intent-filter>
+47        </receiver>
+48
+49        <activity
+49-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:24:9-31:20
+50            android:name="com.tuempresa.miapp.ui.MainActivity"
+50-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:25:13-44
+51            android:exported="true" >
+51-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:26:13-36
+52            <intent-filter>
+52-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:27:13-30:29
+53                <action android:name="android.intent.action.MAIN" />
+53-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:28:17-69
+53-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:28:25-66
+54
+55                <category android:name="android.intent.category.LAUNCHER" />
+55-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:29:17-77
+55-->/home/luchks/Downloads/android_app/app/src/main/AndroidManifest.xml:29:27-74
+56            </intent-filter>
+57        </activity>
+58
+59        <service
+59-->[androidx.room:room-runtime:2.6.1] /home/luchks/.gradle/caches/transforms-4/8b488596db660e3f710ecde55934d950/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+60            android:name="androidx.room.MultiInstanceInvalidationService"
+60-->[androidx.room:room-runtime:2.6.1] /home/luchks/.gradle/caches/transforms-4/8b488596db660e3f710ecde55934d950/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+61            android:directBootAware="true"
+61-->[androidx.room:room-runtime:2.6.1] /home/luchks/.gradle/caches/transforms-4/8b488596db660e3f710ecde55934d950/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+62            android:exported="false" />
+62-->[androidx.room:room-runtime:2.6.1] /home/luchks/.gradle/caches/transforms-4/8b488596db660e3f710ecde55934d950/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+63
+64        <provider
+64-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:29:9-37:20
+65            android:name="androidx.startup.InitializationProvider"
+65-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:30:13-67
+66            android:authorities="com.tuempresa.miapp.androidx-startup"
+66-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:31:13-68
+67            android:exported="false" >
+67-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:32:13-37
+68            <meta-data
+68-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:34:13-36:52
+69                android:name="androidx.work.WorkManagerInitializer"
+69-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:35:17-68
+70                android:value="androidx.startup" />
+70-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:36:17-49
+71            <meta-data
+71-->[androidx.emoji2:emoji2:1.3.0] /home/luchks/.gradle/caches/transforms-4/9a11532f1775bbb4ac9de48e5fe9f27b/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+72                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+72-->[androidx.emoji2:emoji2:1.3.0] /home/luchks/.gradle/caches/transforms-4/9a11532f1775bbb4ac9de48e5fe9f27b/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:30:17-75
+73                android:value="androidx.startup" />
+73-->[androidx.emoji2:emoji2:1.3.0] /home/luchks/.gradle/caches/transforms-4/9a11532f1775bbb4ac9de48e5fe9f27b/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:31:17-49
+74            <meta-data
+74-->[androidx.lifecycle:lifecycle-process:2.8.6] /home/luchks/.gradle/caches/transforms-4/7ec0fabfb488b733c341adea26496c29/transformed/jetified-lifecycle-process-2.8.6/AndroidManifest.xml:29:13-31:52
+75                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+75-->[androidx.lifecycle:lifecycle-process:2.8.6] /home/luchks/.gradle/caches/transforms-4/7ec0fabfb488b733c341adea26496c29/transformed/jetified-lifecycle-process-2.8.6/AndroidManifest.xml:30:17-78
+76                android:value="androidx.startup" />
+76-->[androidx.lifecycle:lifecycle-process:2.8.6] /home/luchks/.gradle/caches/transforms-4/7ec0fabfb488b733c341adea26496c29/transformed/jetified-lifecycle-process-2.8.6/AndroidManifest.xml:31:17-49
+77            <meta-data
+77-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+78                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+78-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+79                android:value="androidx.startup" />
+79-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+80        </provider>
+81
+82        <service
+82-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:39:9-45:35
+83            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+83-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:40:13-88
+84            android:directBootAware="false"
+84-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:41:13-44
+85            android:enabled="@bool/enable_system_alarm_service_default"
+85-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:42:13-72
+86            android:exported="false" />
+86-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:43:13-37
+87        <service
+87-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:46:9-52:35
+88            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+88-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:47:13-84
+89            android:directBootAware="false"
+89-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:48:13-44
+90            android:enabled="@bool/enable_system_job_service_default"
+90-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:49:13-70
+91            android:exported="true"
+91-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:50:13-36
+92            android:permission="android.permission.BIND_JOB_SERVICE" />
+92-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:51:13-69
+93        <service
+93-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:53:9-59:35
+94            android:name="androidx.work.impl.foreground.SystemForegroundService"
+94-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:54:13-81
+95            android:directBootAware="false"
+95-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:55:13-44
+96            android:enabled="@bool/enable_system_foreground_service_default"
+96-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:56:13-77
+97            android:exported="false" />
+97-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:57:13-37
+98
+99        <receiver
+99-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:61:9-66:35
+100            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
+100-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:62:13-88
+101            android:directBootAware="false"
+101-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:63:13-44
+102            android:enabled="true"
+102-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:64:13-35
+103            android:exported="false" />
+103-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:65:13-37
+104        <receiver
+104-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:67:9-77:20
+105            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
+105-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:68:13-106
+106            android:directBootAware="false"
+106-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:69:13-44
+107            android:enabled="false"
+107-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:70:13-36
+108            android:exported="false" >
+108-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:71:13-37
+109            <intent-filter>
+109-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:73:13-76:29
+110                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+110-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:74:17-87
+110-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:74:25-84
+111                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+111-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:75:17-90
+111-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:75:25-87
+112            </intent-filter>
+113        </receiver>
+114        <receiver
+114-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:78:9-88:20
+115            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
+115-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:79:13-104
+116            android:directBootAware="false"
+116-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:80:13-44
+117            android:enabled="false"
+117-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:81:13-36
+118            android:exported="false" >
+118-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:82:13-37
+119            <intent-filter>
+119-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:84:13-87:29
+120                <action android:name="android.intent.action.BATTERY_OKAY" />
+120-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:85:17-77
+120-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:85:25-74
+121                <action android:name="android.intent.action.BATTERY_LOW" />
+121-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:86:17-76
+121-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:86:25-73
+122            </intent-filter>
+123        </receiver>
+124        <receiver
+124-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:89:9-99:20
+125            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
+125-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:90:13-104
+126            android:directBootAware="false"
+126-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:91:13-44
+127            android:enabled="false"
+127-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:92:13-36
+128            android:exported="false" >
+128-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:93:13-37
+129            <intent-filter>
+129-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:95:13-98:29
+130                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+130-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:96:17-83
+130-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:96:25-80
+131                <action android:name="android.intent.action.DEVICE_STORAGE_OK" />
+131-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:97:17-82
+131-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:97:25-79
+132            </intent-filter>
+133        </receiver>
+134        <receiver
+134-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:100:9-109:20
+135            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
+135-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:101:13-103
+136            android:directBootAware="false"
+136-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:102:13-44
+137            android:enabled="false"
+137-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:103:13-36
+138            android:exported="false" >
+138-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:104:13-37
+139            <intent-filter>
+139-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:106:13-108:29
+140                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+140-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:107:17-79
+140-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:107:25-76
+141            </intent-filter>
+142        </receiver>
+143        <receiver
+143-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:110:9-121:20
+144            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
+144-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:111:13-88
+145            android:directBootAware="false"
+145-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:112:13-44
+146            android:enabled="false"
+146-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:113:13-36
+147            android:exported="false" >
+147-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:114:13-37
+148            <intent-filter>
+148-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:116:13-120:29
+149                <action android:name="android.intent.action.BOOT_COMPLETED" />
+149-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:117:17-79
+149-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:117:25-76
+150                <action android:name="android.intent.action.TIME_SET" />
+150-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:118:17-73
+150-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:118:25-70
+151                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+151-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:119:17-81
+151-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:119:25-78
+152            </intent-filter>
+153        </receiver>
+154        <receiver
+154-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:122:9-131:20
+155            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
+155-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:123:13-99
+156            android:directBootAware="false"
+156-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:124:13-44
+157            android:enabled="@bool/enable_system_alarm_service_default"
+157-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:125:13-72
+158            android:exported="false" >
+158-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:126:13-37
+159            <intent-filter>
+159-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:128:13-130:29
+160                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies" />
+160-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:129:17-98
+160-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:129:25-95
+161            </intent-filter>
+162        </receiver>
+163        <receiver
+163-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:132:9-142:20
+164            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
+164-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:133:13-78
+165            android:directBootAware="false"
+165-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:134:13-44
+166            android:enabled="true"
+166-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:135:13-35
+167            android:exported="true"
+167-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:136:13-36
+168            android:permission="android.permission.DUMP" >
+168-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:137:13-57
+169            <intent-filter>
+169-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:139:13-141:29
+170                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS" />
+170-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:140:17-88
+170-->[androidx.work:work-runtime:2.9.0] /home/luchks/.gradle/caches/transforms-4/4cc6b739dc49bef81635e9f63bafdeb9/transformed/work-runtime-2.9.0/AndroidManifest.xml:140:25-85
+171            </intent-filter>
+172        </receiver>
+173
+174        <activity
+174-->[androidx.compose.ui:ui-tooling-android:1.7.2] /home/luchks/.gradle/caches/transforms-4/e7cc366840b5f29873accf1f0eaf2996/transformed/jetified-ui-tooling-release/AndroidManifest.xml:23:9-25:39
+175            android:name="androidx.compose.ui.tooling.PreviewActivity"
+175-->[androidx.compose.ui:ui-tooling-android:1.7.2] /home/luchks/.gradle/caches/transforms-4/e7cc366840b5f29873accf1f0eaf2996/transformed/jetified-ui-tooling-release/AndroidManifest.xml:24:13-71
+176            android:exported="true" />
+176-->[androidx.compose.ui:ui-tooling-android:1.7.2] /home/luchks/.gradle/caches/transforms-4/e7cc366840b5f29873accf1f0eaf2996/transformed/jetified-ui-tooling-release/AndroidManifest.xml:25:13-36
+177        <activity
+177-->[androidx.compose.ui:ui-test-manifest:1.7.2] /home/luchks/.gradle/caches/transforms-4/a434199c4dcc7f3e53c4ca9659934639/transformed/jetified-ui-test-manifest-1.7.2/AndroidManifest.xml:23:9-25:39
+178            android:name="androidx.activity.ComponentActivity"
+178-->[androidx.compose.ui:ui-test-manifest:1.7.2] /home/luchks/.gradle/caches/transforms-4/a434199c4dcc7f3e53c4ca9659934639/transformed/jetified-ui-test-manifest-1.7.2/AndroidManifest.xml:24:13-63
+179            android:exported="true" />
+179-->[androidx.compose.ui:ui-test-manifest:1.7.2] /home/luchks/.gradle/caches/transforms-4/a434199c4dcc7f3e53c4ca9659934639/transformed/jetified-ui-test-manifest-1.7.2/AndroidManifest.xml:25:13-36
+180        <activity
+180-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:15:9-21:20
+181            android:name="com.google.android.libraries.places.widget.AutocompleteActivity"
+181-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:16:13-91
+182            android:exported="false"
+182-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:17:13-37
+183            android:label="@string/places_autocomplete_label"
+183-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:18:13-62
+184            android:theme="@style/PlacesAutocompleteOverlay"
+184-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:19:13-61
+185            android:windowSoftInputMode="adjustResize" >
+185-->[com.google.android.libraries.places:places:3.3.0] /home/luchks/.gradle/caches/transforms-4/f7a61bfa837fc6fd8bdce442f768d974/transformed/jetified-places-3.3.0/AndroidManifest.xml:20:13-55
+186        </activity> <!-- Needs to be explicitly declared on P+ -->
+187        <uses-library
+187-->[com.google.android.gms:play-services-maps:17.0.0] /home/luchks/.gradle/caches/transforms-4/5c5f489c2c28ec1992cb3a0adacca1cf/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:33:9-35:40
+188            android:name="org.apache.http.legacy"
+188-->[com.google.android.gms:play-services-maps:17.0.0] /home/luchks/.gradle/caches/transforms-4/5c5f489c2c28ec1992cb3a0adacca1cf/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:34:13-50
+189            android:required="false" />
+189-->[com.google.android.gms:play-services-maps:17.0.0] /home/luchks/.gradle/caches/transforms-4/5c5f489c2c28ec1992cb3a0adacca1cf/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:35:13-37
+190
+191        <activity
+191-->[com.google.android.gms:play-services-base:18.0.1] /home/luchks/.gradle/caches/transforms-4/044d60e5485055a11828a197922549ec/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
+192            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+192-->[com.google.android.gms:play-services-base:18.0.1] /home/luchks/.gradle/caches/transforms-4/044d60e5485055a11828a197922549ec/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
+193            android:exported="false"
+193-->[com.google.android.gms:play-services-base:18.0.1] /home/luchks/.gradle/caches/transforms-4/044d60e5485055a11828a197922549ec/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
+194            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+194-->[com.google.android.gms:play-services-base:18.0.1] /home/luchks/.gradle/caches/transforms-4/044d60e5485055a11828a197922549ec/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
+195
+196        <meta-data
+196-->[com.google.android.gms:play-services-basement:18.0.0] /home/luchks/.gradle/caches/transforms-4/d7db9255da1948a63f754c17d4f29835/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:21:9-23:69
+197            android:name="com.google.android.gms.version"
+197-->[com.google.android.gms:play-services-basement:18.0.0] /home/luchks/.gradle/caches/transforms-4/d7db9255da1948a63f754c17d4f29835/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:22:13-58
+198            android:value="@integer/google_play_services_version" />
+198-->[com.google.android.gms:play-services-basement:18.0.0] /home/luchks/.gradle/caches/transforms-4/d7db9255da1948a63f754c17d4f29835/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:23:13-66
+199
+200        <service
+200-->[com.google.android.datatransport:transport-backend-cct:2.3.0] /home/luchks/.gradle/caches/transforms-4/fd9ec031565bf54266d411ccebd4ee06/transformed/jetified-transport-backend-cct-2.3.0/AndroidManifest.xml:29:9-35:19
+201            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+201-->[com.google.android.datatransport:transport-backend-cct:2.3.0] /home/luchks/.gradle/caches/transforms-4/fd9ec031565bf54266d411ccebd4ee06/transformed/jetified-transport-backend-cct-2.3.0/AndroidManifest.xml:30:13-103
+202            android:exported="false" >
+202-->[com.google.android.datatransport:transport-backend-cct:2.3.0] /home/luchks/.gradle/caches/transforms-4/fd9ec031565bf54266d411ccebd4ee06/transformed/jetified-transport-backend-cct-2.3.0/AndroidManifest.xml:31:13-37
+203            <meta-data
+203-->[com.google.android.datatransport:transport-backend-cct:2.3.0] /home/luchks/.gradle/caches/transforms-4/fd9ec031565bf54266d411ccebd4ee06/transformed/jetified-transport-backend-cct-2.3.0/AndroidManifest.xml:32:13-34:39
+204                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+204-->[com.google.android.datatransport:transport-backend-cct:2.3.0] /home/luchks/.gradle/caches/transforms-4/fd9ec031565bf54266d411ccebd4ee06/transformed/jetified-transport-backend-cct-2.3.0/AndroidManifest.xml:33:17-94
+205                android:value="cct" />
+205-->[com.google.android.datatransport:transport-backend-cct:2.3.0] /home/luchks/.gradle/caches/transforms-4/fd9ec031565bf54266d411ccebd4ee06/transformed/jetified-transport-backend-cct-2.3.0/AndroidManifest.xml:34:17-36
+206        </service>
+207        <service
+207-->[com.google.android.datatransport:transport-runtime:2.2.3] /home/luchks/.gradle/caches/transforms-4/7848e44eb5e4bb4b7332b389d833aaa3/transformed/jetified-transport-runtime-2.2.3/AndroidManifest.xml:26:9-30:19
+208            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+208-->[com.google.android.datatransport:transport-runtime:2.2.3] /home/luchks/.gradle/caches/transforms-4/7848e44eb5e4bb4b7332b389d833aaa3/transformed/jetified-transport-runtime-2.2.3/AndroidManifest.xml:27:13-117
+209            android:exported="false"
+209-->[com.google.android.datatransport:transport-runtime:2.2.3] /home/luchks/.gradle/caches/transforms-4/7848e44eb5e4bb4b7332b389d833aaa3/transformed/jetified-transport-runtime-2.2.3/AndroidManifest.xml:28:13-37
+210            android:permission="android.permission.BIND_JOB_SERVICE" >
+210-->[com.google.android.datatransport:transport-runtime:2.2.3] /home/luchks/.gradle/caches/transforms-4/7848e44eb5e4bb4b7332b389d833aaa3/transformed/jetified-transport-runtime-2.2.3/AndroidManifest.xml:29:13-69
+211        </service>
+212
+213        <receiver
+213-->[com.google.android.datatransport:transport-runtime:2.2.3] /home/luchks/.gradle/caches/transforms-4/7848e44eb5e4bb4b7332b389d833aaa3/transformed/jetified-transport-runtime-2.2.3/AndroidManifest.xml:32:9-34:40
+214            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+214-->[com.google.android.datatransport:transport-runtime:2.2.3] /home/luchks/.gradle/caches/transforms-4/7848e44eb5e4bb4b7332b389d833aaa3/transformed/jetified-transport-runtime-2.2.3/AndroidManifest.xml:33:13-132
+215            android:exported="false" />
+215-->[com.google.android.datatransport:transport-runtime:2.2.3] /home/luchks/.gradle/caches/transforms-4/7848e44eb5e4bb4b7332b389d833aaa3/transformed/jetified-transport-runtime-2.2.3/AndroidManifest.xml:34:13-37
+216        <receiver
+216-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+217            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+217-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+218            android:directBootAware="false"
+218-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+219            android:enabled="true"
+219-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+220            android:exported="true"
+220-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+221            android:permission="android.permission.DUMP" >
+221-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+222            <intent-filter>
+222-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+223                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+223-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+223-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+224            </intent-filter>
+225            <intent-filter>
+225-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+226                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+226-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+226-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+227            </intent-filter>
+228            <intent-filter>
+228-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+229                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+229-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+229-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+230            </intent-filter>
+231            <intent-filter>
+231-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+232                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+232-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+232-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/luchks/.gradle/caches/transforms-4/e12233ab024fa61718cd4e509e973852/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+233            </intent-filter>
+234        </receiver>
+235    </application>
+236
+237</manifest>

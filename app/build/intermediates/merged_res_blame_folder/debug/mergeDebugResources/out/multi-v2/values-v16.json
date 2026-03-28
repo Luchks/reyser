@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.tuempresa.miapp-mergeDebugResources-68:/values-v16/values-v16.xml",
+            "map": [
+                {
+                    "source": "/home/luchks/.gradle/caches/transforms-4/87e1f9191ef5d9a6123e5ab857aeb67a/transformed/appcompat-1.0.0/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "5",
+                        "endColumns": "12",
+                        "endOffsets": "223"
+                    }
+                }
+            ]
+        }
+    ]
+}

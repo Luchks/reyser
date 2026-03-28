@@ -1,0 +1,11 @@
+{
+    "name": "mi/api",
+    "description": "API REST en PHP",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {}
+}

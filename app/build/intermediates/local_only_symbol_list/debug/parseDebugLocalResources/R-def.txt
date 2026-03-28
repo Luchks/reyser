@@ -1,0 +1,4 @@
+R_DEF: Internal format may change without notice
+local
+drawable splash_lima_vip
+style Theme.Material3.DayNight.NoActionBar

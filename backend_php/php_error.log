@@ -1,0 +1,44 @@
+[06-Mar-2026 21:42:16 UTC] Google Calendar: evento creado con ID = 3320isktgatq0vm9c5r5tjfto8
+[10-Mar-2026 22:32:58 UTC] Google Calendar: evento creado con ID = k094mj4hd4u53v2vj8lpjce8us
+[10-Mar-2026 22:37:16 UTC] Google Calendar: evento creado con ID = daoud4mn4hur1jfelp3lc4n5p0
+[11-Mar-2026 00:41:45 UTC] Google Calendar: evento creado con ID = b7ifkgi9glpb85gfr26vkpicq0
+[27-Mar-2026 13:52:00 UTC] PHP Fatal error:  Uncaught Error: Class "mysqli" not found in /home/luchks/Downloads/android_app/backend_php/db.php:7
+Stack trace:
+#0 /home/luchks/Downloads/android_app/backend_php/create_item.php(10): include()
+#1 {main}
+  thrown in /home/luchks/Downloads/android_app/backend_php/db.php on line 7
+[27-Mar-2026 13:52:00 UTC] PHP Fatal error:  Uncaught Error: Class "mysqli" not found in /home/luchks/Downloads/android_app/backend_php/db.php:7
+Stack trace:
+#0 /home/luchks/Downloads/android_app/backend_php/create_item.php(10): include()
+#1 {main}
+  thrown in /home/luchks/Downloads/android_app/backend_php/db.php on line 7
+[27-Mar-2026 13:54:53 UTC] PHP Fatal error:  Uncaught Error: Class "mysqli" not found in /home/luchks/Downloads/android_app/backend_php/db.php:7
+Stack trace:
+#0 /home/luchks/Downloads/android_app/backend_php/create_item.php(10): include()
+#1 {main}
+  thrown in /home/luchks/Downloads/android_app/backend_php/db.php on line 7
+[27-Mar-2026 13:55:53 UTC] PHP Fatal error:  Uncaught Error: Class "mysqli" not found in /home/luchks/Downloads/android_app/backend_php/db.php:7
+Stack trace:
+#0 /home/luchks/Downloads/android_app/backend_php/create_item.php(10): include()
+#1 {main}
+  thrown in /home/luchks/Downloads/android_app/backend_php/db.php on line 7
+[27-Mar-2026 13:55:53 UTC] PHP Fatal error:  Uncaught Error: Class "mysqli" not found in /home/luchks/Downloads/android_app/backend_php/db.php:7
+Stack trace:
+#0 /home/luchks/Downloads/android_app/backend_php/create_item.php(10): include()
+#1 {main}
+  thrown in /home/luchks/Downloads/android_app/backend_php/db.php on line 7
+[27-Mar-2026 13:58:06 UTC] PHP Fatal error:  Uncaught Error: Class "mysqli" not found in /home/luchks/Downloads/android_app/backend_php/db.php:7
+Stack trace:
+#0 /home/luchks/Downloads/android_app/backend_php/create_item.php(10): include()
+#1 {main}
+  thrown in /home/luchks/Downloads/android_app/backend_php/db.php on line 7
+[27-Mar-2026 13:58:06 UTC] PHP Fatal error:  Uncaught Error: Class "mysqli" not found in /home/luchks/Downloads/android_app/backend_php/db.php:7
+Stack trace:
+#0 /home/luchks/Downloads/android_app/backend_php/create_item.php(10): include()
+#1 {main}
+  thrown in /home/luchks/Downloads/android_app/backend_php/db.php on line 7
+[27-Mar-2026 14:11:46 UTC] Google Calendar: evento creado con ID = 1udiedhg3u6sonhl068e048m9c
+[27-Mar-2026 14:32:35 UTC] Google Calendar: fecha/hora inválida — fecha=2026-03-27 hora=09:32 a. m.
+[28-Mar-2026 00:10:03 UTC] Google Calendar: fecha/hora inválida — fecha=2026-03-27 hora=07:11 p. m.
+[28-Mar-2026 19:04:32 UTC] Google Calendar: evento creado con ID = firdbd9udcue6iss0flsh01md8
+[28-Mar-2026 19:04:32 UTC] Google Calendar: fecha/hora inválida — fecha=2026-03-28 hora=02:02 p. m.
