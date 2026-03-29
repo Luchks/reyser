@@ -1,0 +1,24 @@
+# --- Java/Android ---
+*.hprof
+*.pyc
+/build/
+.gradle/
+captures/
+local.properties
+*.apk
+*.ap_
+*.aab
+.externalNativeBuild/
+
+# --- PHP / Backend ---
+vendor/
+.phpunit.result.cache
+.env
+composer.lock
+
+# --- OS / IDE ---
+.DS_Store
+.idea/
+*.iml
+*.swp
+*~
