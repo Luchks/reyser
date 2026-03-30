@@ -104,10 +104,8 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (::vm.isInitialized) vm.autoSaveDraft()
-    }
+    // onPause NO llama autoSaveDraft: ya lo hace onStop del lifecycle observer.
+    // Tenerlo en ambos causaba doble guardado y creación de registros en blanco.
 
     override fun onDestroy() {
         // ✅ NUEVO: desregistrar el callback de red para evitar memory leaks

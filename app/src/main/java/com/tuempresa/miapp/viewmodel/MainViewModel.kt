@@ -1,16 +1,5 @@
 package com.tuempresa.miapp.viewmodel
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  MainViewModel.kt  —  ViewModel con lógica offline-first SIMPLE
-//
-//  CAMBIOS RESPECTO AL ORIGINAL:
-//  • El init ya NO hace syncItemsFromServer() ni replaceActiveCache()
-//    (eso causaba redundancia y duplicados en Room)
-//  • Con internet → lee directo del servidor y actualiza Room
-//  • Sin internet → muestra lo que hay en Room (solo pendientes)
-//  • Al reconectar → primero vacía la cola PENDING_*, luego baja del servidor
-// ═══════════════════════════════════════════════════════════════════════════════
-
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,33 +36,37 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
 
+    // Estado del formulario de reserva
     private val _addEditState = MutableStateFlow(AddEditItemUiState())
     val addEditState: StateFlow<AddEditItemUiState> = _addEditState.asStateFlow()
 
     // ─────────────────────────────────────────────────────────────────────────
     // INIT
-    //
-    // Solo observa Room reactivamente. NO descarga del servidor aquí.
-    // La descarga ocurre en fetchItems() llamado desde MainActivity.onStart()
+    // Al arrancar:
+    //   1. Observar Room reactivamente (la UI siempre refleja Room)
+    //   2. Enviar pendientes si hay internet
+    //   3. Bajar datos frescos del servidor
     // ─────────────────────────────────────────────────────────────────────────
 
     init {
+        // Observar Room: cuando Room cambia (por sync o por operación offline),
+        // la UI se actualiza automáticamente
         viewModelScope.launch {
             repo.observeItems().collect { _items.value = it }
         }
         viewModelScope.launch {
             repo.observeTrash().collect { _trash.value = it }
         }
-        // Solo sincronizar pendientes al iniciar, NO descargar del servidor.
-        // fetchItems() se llama desde MainActivity.onStart() cuando hay red.
+
+        // Al iniciar: primero enviar pendientes, luego bajar datos del servidor
         viewModelScope.launch(Dispatchers.IO) {
-            runCatching { repo.syncPendingOperations() }
-                .onFailure { Log.w("MainViewModel", "init syncPending: ${it.message}") }
+            repo.syncPendingOperations() // cola offline → MySQL
+            repo.syncItemsFromServer()   // MySQL → Room (activos)
         }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // POLLING EN TIEMPO REAL (solo con internet)
+    // POLLING EN TIEMPO REAL (solo activo cuando la app está en foreground)
     // ─────────────────────────────────────────────────────────────────────────
 
     private var realtimeJob: Job? = null
@@ -86,7 +79,7 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
                 try {
                     repo.checkForUpdatesAndSync()
                 } catch (e: Exception) {
-                    Log.w("MainViewModel", "Polling sin conexión — ${e.message}")
+                    Log.w("MainViewModel", "Polling sin conexión: ${e.message}")
                 }
                 delay(intervalMs)
             }
@@ -100,39 +93,40 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // RECONEXIÓN  (llamado por NetworkConnectivityObserver)
-    //
-    // Orden correcto:
-    //   1. Vaciar cola offline → servidor (lo que se hizo sin internet)
-    //   2. Bajar estado actual del servidor → Room
+    // RECONEXIÓN
+    // Llamado por NetworkConnectivityObserver cuando vuelve internet.
+    // Patrón: primero vaciar cola offline → luego bajar datos frescos
     // ─────────────────────────────────────────────────────────────────────────
 
     fun syncPendingOnReconnect() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("MainViewModel", "Red recuperada — sincronizando...")
-                repo.syncPendingOperations()   // 1. subir pendientes
-                repo.syncItemsFromServer()      // 2. bajar activos
-                repo.syncTrashFromServer()      // 3. bajar papelera
-                Log.d("MainViewModel", "Sync post-reconexión completado")
+                Log.d("MainViewModel", "Internet recuperado → sincronizando pendientes")
+                repo.syncPendingOperations() // 1. cola offline → MySQL
+                repo.syncItemsFromServer()   // 2. MySQL → Room (activos)
+                repo.syncTrashFromServer()   // 3. MySQL → Room (papelera)
+                Log.d("MainViewModel", "Sync post-reconexión OK")
             } catch (e: Exception) {
-                Log.e("MainViewModel", "syncPendingOnReconnect: ${e.message}")
+                Log.e("MainViewModel", "syncPendingOnReconnect error: ${e.message}")
             }
         }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // FETCH (pull-to-refresh o llamada desde onStart)
+    // FETCH EXPLÍCITO (pull-to-refresh / LaunchedEffect en pantallas)
     // ─────────────────────────────────────────────────────────────────────────
 
     fun fetchItems() {
         viewModelScope.launch {
             _loading.value = true
             try {
-                withContext(Dispatchers.IO) { repo.syncItemsFromServer() }
+                withContext(Dispatchers.IO) {
+                    repo.syncPendingOperations() // siempre enviar pendientes primero
+                    repo.syncItemsFromServer()
+                }
             } catch (e: Exception) {
-                // Sin internet — Room ya tiene lo que hay, no hacer nada
-                Log.w("MainViewModel", "fetchItems sin conexión: ${e.message}")
+                Log.e("MainViewModel", "fetchItems error: ${e.message}")
+                // Sin internet: la UI sigue mostrando Room (último estado conocido)
             } finally {
                 _loading.value = false
             }
@@ -144,33 +138,40 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
             try {
                 withContext(Dispatchers.IO) { repo.syncTrashFromServer() }
             } catch (e: Exception) {
-                Log.w("MainViewModel", "fetchTrash sin conexión: ${e.message}")
+                Log.e("MainViewModel", "fetchTrash error: ${e.message}")
             }
         }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
     // CRUD
+    // Patrón: Room primero (respuesta inmediata en UI) → luego servidor
     // ─────────────────────────────────────────────────────────────────────────
 
     fun deleteItem(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { repo.softDelete(id) }
-                .onFailure { Log.e("MainViewModel", "deleteItem: ${it.message}") }
+                .onFailure { Log.e("MainViewModel", "deleteItem error: ${it.message}") }
         }
     }
 
     fun restoreItem(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { repo.restore(id) }
-                .onFailure { Log.e("MainViewModel", "restoreItem: ${it.message}") }
+                .onFailure { Log.e("MainViewModel", "restoreItem error: ${it.message}") }
         }
     }
 
-    fun hardDeleteItem(id: Int) {
+    /**
+     * hardDelete requiere internet. Si falla, avisa al usuario.
+     */
+    fun hardDeleteItem(id: Int, onError: ((String) -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { repo.hardDelete(id) }
-                .onFailure { Log.e("MainViewModel", "hardDeleteItem: ${it.message}") }
+                .onFailure {
+                    Log.e("MainViewModel", "hardDeleteItem error: ${it.message}")
+                    onError?.invoke("Sin internet. No se puede eliminar definitivamente.")
+                }
         }
     }
 
@@ -178,12 +179,12 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
         if (itemId <= 0) return
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { repo.updateEstadoPago(itemId, nuevoEstado) }
-                .onFailure { Log.e("MainViewModel", "updateEstadoPago: ${it.message}") }
+                .onFailure { Log.e("MainViewModel", "updateEstadoPago error: ${it.message}") }
         }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // FORMULARIO
+    // FORMULARIO: cargar item para edición
     // ─────────────────────────────────────────────────────────────────────────
 
     fun loadItemForEdit(itemId: Int, itemsList: List<Item>) {
@@ -237,6 +238,10 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
             id_calendar          = item.id_calendar
         )
     }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // FORMULARIO: eventos
+    // ─────────────────────────────────────────────────────────────────────────
 
     fun onEvent(event: AddEditItemEvent) {
         when (event) {
@@ -296,14 +301,29 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
     // GUARDADO
     // ─────────────────────────────────────────────────────────────────────────
 
+    // Flag para evitar que onPause y onStop disparen dos guardados simultáneos
+    private var autoSaveInProgress = false
+
+    /**
+     * Autoguardado cuando la app va a background (onPause / onStop).
+     * Solo guarda borradores, nunca COMPLETADO.
+     *
+     * Condición de guarda: el formulario tiene datos reales del usuario,
+     * no solo los valores por defecto generados automáticamente.
+     */
     fun autoSaveDraft() {
         if (_saving.value) return
+        if (autoSaveInProgress) return  // evita doble disparo onPause + onStop
         val s = _addEditState.value
-        if (s.nombrePrincipal.isBlank() && s.codigoReserva.isBlank()) return
+
+        // CONDICIÓN ROBUSTA: codigoReserva nunca está en blanco (tiene valor por defecto),
+        // así que no sirve como guarda. El campo real que indica que el usuario tocó
+        // el formulario es nombrePrincipal (no tiene valor por defecto).
+        if (s.nombrePrincipal.isBlank()) return
         if (s.estadoReserva == "COMPLETADO") return
 
         val item = createItemFromState(s, "BORRADOR")
-
+        autoSaveInProgress = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (s.itemId == -1) {
@@ -316,12 +336,18 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
                 } else {
                     repo.updateItem(item)
                 }
+                Log.d("MainViewModel", "autoSaveDraft OK")
             } catch (e: Exception) {
                 Log.w("MainViewModel", "autoSaveDraft quedó como PENDING: ${e.message}")
+            } finally {
+                autoSaveInProgress = false
             }
         }
     }
 
+    /**
+     * Guardado manual del usuario (botón Guardar / Finalizar).
+     */
     fun saveItem(finalizar: Boolean = false, onDone: () -> Unit) {
         val estadoFinal = if (finalizar) "COMPLETADO" else _addEditState.value.estadoReserva
         val s = _addEditState.value
@@ -340,7 +366,7 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
                 onDone()
             } catch (e: Exception) {
                 Log.e("MainViewModel", "saveItem error: ${e.message}")
-                onDone()
+                onDone() // igual cerramos el formulario, quedó guardado en Room
             } finally {
                 _saving.value = false
             }
@@ -410,9 +436,9 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
             ?: return state.copy(precioPorPersona = 0, precioComisionable = 0, precioTotal = 0)
         val pagoConTarjeta = state.tipoPago in listOf("POS", "Pago Link")
         val precioPersona = when (state.tipoCliente) {
-            "Cliente Directo" -> if (pagoConTarjeta) prices.publicTarjeta        else prices.publicEfectivo
-            "Agencia"         -> if (pagoConTarjeta) prices.agenciaTarjeta       else prices.agenciaEfectivo
-            "Socio Hotelero"  -> if (pagoConTarjeta) prices.hotelPasajeroTarjeta else prices.hotelPasajeroEfectivo
+            "Cliente Directo" -> if (pagoConTarjeta) prices.publicTarjeta         else prices.publicEfectivo
+            "Agencia"         -> if (pagoConTarjeta) prices.agenciaTarjeta         else prices.agenciaEfectivo
+            "Socio Hotelero"  -> if (pagoConTarjeta) prices.hotelPasajeroTarjeta   else prices.hotelPasajeroEfectivo
             else              -> 0
         }
         return state.copy(
@@ -429,11 +455,11 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
     )
 
     private fun getTourPrices(nombreTour: String): TourPrices? = when (nombreTour) {
-        "LIMA CITY TOUR PLUS"                             -> TourPrices(35, 38, 20, 20, 35, 38, 20, 20)
-        "CIRCUITO MÁGICO DEL AGUA"                        -> TourPrices(33, 33, 19, 19, 33, 33, 15, 15)
-        "LIMA CITY TOUR PLUS + CIRCUITO MÁGICO DEL AGUA" -> TourPrices(65, 65, 37, 37, 65, 65, 30, 30)
-        "LIMA CITY TOUR CLÁSICO + CATACUMBAS"            -> TourPrices(40, 40, 25, 25, 40, 40, 20, 20)
-        "FULL DAY ICA: PARACAS Y HUACACHINA"             -> TourPrices(99, 99, 75, 75, 99, 99, 20, 20)
+        "LIMA CITY TOUR PLUS"                               -> TourPrices(35, 38, 20, 20, 35, 38, 20, 20)
+        "CIRCUITO MÁGICO DEL AGUA"                          -> TourPrices(33, 33, 19, 19, 33, 33, 15, 15)
+        "LIMA CITY TOUR PLUS + CIRCUITO MÁGICO DEL AGUA"   -> TourPrices(65, 65, 37, 37, 65, 65, 30, 30)
+        "LIMA CITY TOUR CLÁSICO + CATACUMBAS"              -> TourPrices(40, 40, 25, 25, 40, 40, 20, 20)
+        "FULL DAY ICA: PARACAS Y HUACACHINA"               -> TourPrices(99, 99, 75, 75, 99, 99, 20, 20)
         else -> null
     }
 
@@ -454,14 +480,16 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
         super.onCleared()
 
         val s = _addEditState.value
-        if (s.nombrePrincipal.isBlank() && s.codigoReserva.isBlank()) return
+        // Misma condición robusta que autoSaveDraft: solo guardar si el usuario
+        // realmente escribió algo (nombrePrincipal es el único campo sin valor por defecto)
+        if (s.nombrePrincipal.isBlank()) return
         if (s.estadoReserva == "COMPLETADO") return
 
         val item = createItemFromState(s, "BORRADOR")
         kotlinx.coroutines.runBlocking(Dispatchers.IO) {
             runCatching { repo.saveDraftToRoom(item, s.itemId) }
                 .onSuccess { Log.d("MainViewModel", "onCleared: borrador guardado en Room") }
-                .onFailure { Log.e("MainViewModel", "onCleared: error: ${it.message}") }
+                .onFailure { Log.e("MainViewModel", "onCleared error: ${it.message}") }
         }
     }
 }
