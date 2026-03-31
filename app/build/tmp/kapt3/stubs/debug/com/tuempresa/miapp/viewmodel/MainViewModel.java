@@ -113,6 +113,13 @@ public final class MainViewModel extends androidx.lifecycle.ViewModel {
     
     /**
      * Guardado manual del usuario (botón Guardar / Finalizar).
+     *
+     * PATRÓN OPTIMISTA:
+     *  1. Guarda en Room INMEDIATAMENTE → la UI reacciona al instante
+     *  2. Llama onDone() al instante → el usuario ve el resultado sin esperar
+     *  3. En paralelo intenta sincronizar con el servidor (sin bloquear la UI)
+     *     - Con internet: se sincroniza y Room se actualiza solo
+     *     - Sin internet: queda PENDING en Room, se sincroniza al reconectar
      */
     public final void saveItem(boolean finalizar, @org.jetbrains.annotations.NotNull()
     kotlin.jvm.functions.Function0<kotlin.Unit> onDone) {

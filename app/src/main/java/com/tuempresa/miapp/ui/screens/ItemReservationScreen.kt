@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import com.tuempresa.miapp.data.Item
 import com.tuempresa.miapp.ui.components.*
 import com.tuempresa.miapp.ui.state.AddEditItemEvent
+import com.tuempresa.miapp.ui.state.toPreviewItem
 import com.tuempresa.miapp.viewmodel.MainViewModel
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -80,19 +81,37 @@ fun ItemReservationScreen(
         ) {
                 when (mode) {
                 ReservationMode.VIEW -> {
-                    // ✅ ANTES: val item = items.find { it.id == itemId }
-                    // El itemId de navegación sigue siendo -1 para reservas nuevas.
-                    // Usamos state.itemId que sí se actualiza tras guardar.
+                    // Buscar el item por serverId primero, luego por roomId
+                    // Para reservas nuevas guardadas offline, el id puede ser 0
+                    // hasta que el servidor responda — mostramos el state local como fallback
                     val effectiveId = if (itemId == -1) state.itemId else itemId
                     val item = items.find { it.id == effectiveId }
 
-                    if (item != null) {
-                        ReservationReport(
-                            item = item,
-                            onEdit = { mode = ReservationMode.EDIT }
-                        )
-                    } else {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    when {
+                        item != null -> {
+                            // Caso normal: item encontrado en la lista (viene de Room/servidor)
+                            ReservationReport(
+                                item = item,
+                                onEdit = { mode = ReservationMode.EDIT }
+                            )
+                        }
+                        state.nombrePrincipal.isNotBlank() -> {
+                            // Guardado optimista: el item aún no llegó a items (Room aún
+                            // está procesando), pero tenemos el estado local — lo mostramos
+                            // directamente desde el state del formulario sin esperar a Room
+                            ReservationReport(
+                                item = state.toPreviewItem(),
+                                onEdit = { mode = ReservationMode.EDIT }
+                            )
+                        }
+                        itemId == -1 -> {
+                            // Reserva nueva sin datos — volver al listado
+                            LaunchedEffect(Unit) { navController.popBackStack() }
+                        }
+                        else -> {
+                            // Cargando item existente del servidor
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                        }
                     }
                 }
 

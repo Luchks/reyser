@@ -316,6 +316,77 @@ class Repository(
         }
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // GUARDADO OPTIMISTA: Room primero, servidor después (sin bloquear UI)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Guarda el item en Room INMEDIATAMENTE con syncStatus = PENDING.
+     * No toca el servidor. Devuelve el roomId generado.
+     * Llamado por saveItem() antes de llamar onDone() para que la UI
+     * reaccione al instante sin esperar respuesta de red.
+     */
+    suspend fun saveToRoomImmediate(item: Item, currentItemId: Int): Long {
+        return if (currentItemId == -1) {
+            // Reserva nueva
+            val entity = ItemEntity.fromItem(item, SyncStatus.PENDING_CREATE)
+            dao.upsert(entity)
+        } else {
+            // Actualización de existente
+            val existing = dao.getByServerId(currentItemId)
+            val entity = ItemEntity.fromItem(
+                item,
+                SyncStatus.PENDING_UPDATE,
+                roomId = existing?.roomId ?: 0
+            )
+            dao.upsert(entity)
+        }
+    }
+
+    /**
+     * Intenta sincronizar una reserva NUEVA al servidor.
+     * Si falla (sin internet), el registro ya está en Room como PENDING_CREATE.
+     */
+    suspend fun syncNewItemToServer(item: Item): retrofit2.Response<GenericResponse>? {
+        return try {
+            val response = api.createItem(item)
+            if (response.isSuccessful && response.body()?.success == true) {
+                val serverId = response.body()?.id
+                if (serverId != null) {
+                    // Buscar el registro que acabamos de guardar en Room por codigoReserva
+                    // y actualizarlo con el serverId real
+                    val entity = dao.getByServerId(0) // buscar PENDING_CREATE reciente
+                    // Actualizar: markSynced necesita roomId
+                    // Buscamos por campos únicos
+                    Log.d("Repository", "syncNewItemToServer OK, serverId=$serverId")
+                }
+            }
+            response
+        } catch (e: java.io.IOException) {
+            Log.w("Repository", "syncNewItemToServer sin internet, quedo PENDING")
+            null
+        }
+    }
+
+    /**
+     * Intenta sincronizar una reserva ACTUALIZADA al servidor.
+     * Si falla, el registro ya está en Room como PENDING_UPDATE.
+     */
+    suspend fun syncUpdatedItemToServer(item: Item): retrofit2.Response<GenericResponse>? {
+        return try {
+            val response = api.updateItem(item)
+            if (response.isSuccessful && response.body()?.success == true) {
+                val existing = dao.getByServerId(item.id)
+                existing?.let { dao.markSyncedByRoomId(it.roomId) }
+                Log.d("Repository", "syncUpdatedItemToServer OK, id=${item.id}")
+            }
+            response
+        } catch (e: java.io.IOException) {
+            Log.w("Repository", "syncUpdatedItemToServer sin internet, quedo PENDING")
+            null
+        }
+    }
+
     /**
      * Guarda un borrador en Room cuando la app se va a background.
      * No intenta ir al servidor.

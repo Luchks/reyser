@@ -1,4 +1,4 @@
-#Thu Mar 26 18:59:26 PET 2026
+#Mon Mar 30 18:25:47 PET 2026
 base.0=/home/luchks/Downloads/android_app/app/build/intermediates/dex/debugAndroidTest/mergeExtDexDebugAndroidTest/classes.dex
 base.1=/home/luchks/Downloads/android_app/app/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/0/classes.dex
 path.0=classes.dex

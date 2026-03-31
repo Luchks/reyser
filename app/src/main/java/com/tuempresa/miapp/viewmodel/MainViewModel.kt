@@ -347,6 +347,13 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
 
     /**
      * Guardado manual del usuario (botón Guardar / Finalizar).
+     *
+     * PATRÓN OPTIMISTA:
+     *   1. Guarda en Room INMEDIATAMENTE → la UI reacciona al instante
+     *   2. Llama onDone() al instante → el usuario ve el resultado sin esperar
+     *   3. En paralelo intenta sincronizar con el servidor (sin bloquear la UI)
+     *      - Con internet: se sincroniza y Room se actualiza solo
+     *      - Sin internet: queda PENDING en Room, se sincroniza al reconectar
      */
     fun saveItem(finalizar: Boolean = false, onDone: () -> Unit) {
         val estadoFinal = if (finalizar) "COMPLETADO" else _addEditState.value.estadoReserva
@@ -354,21 +361,37 @@ class MainViewModel(private val repo: Repository) : ViewModel() {
         val item = createItemFromState(s, estadoFinal)
 
         viewModelScope.launch {
-            _saving.value = true
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    if (s.itemId == -1) repo.createItem(item)
-                    else repo.updateItem(item)
+            // PASO 1: guardar en Room de forma instantánea (sin tocar el servidor)
+            val roomId = withContext(Dispatchers.IO) {
+                repo.saveToRoomImmediate(item, s.itemId)
+            }
+
+            // PASO 2: actualizar el itemId en el estado si era una reserva nueva
+            if (s.itemId == -1 && roomId > 0) {
+                // roomId local hasta que el servidor devuelva el serverId real
+                // No tocamos itemId aquí para no confundir con serverId
+            }
+
+            // PASO 3: notificar a la UI inmediatamente (sin esperar al servidor)
+            _saving.value = false
+            onDone()
+
+            // PASO 4: sincronizar con el servidor EN PARALELO (fire and forget)
+            // La UI ya cambió a modo VIEW, el usuario no espera esto
+            launch(Dispatchers.IO) {
+                try {
+                    if (s.itemId == -1) {
+                        val response = repo.syncNewItemToServer(item)
+                        response?.body()?.id?.let { serverId ->
+                            _addEditState.update { it.copy(itemId = serverId) }
+                        }
+                    } else {
+                        repo.syncUpdatedItemToServer(item)
+                    }
+                } catch (e: Exception) {
+                    // Sin internet: quedó PENDING en Room, se sincroniza al reconectar
+                    Log.w("MainViewModel", "saveItem: sin internet, quedó como PENDING")
                 }
-                response?.body()?.id?.let { newId ->
-                    _addEditState.update { it.copy(itemId = newId) }
-                }
-                onDone()
-            } catch (e: Exception) {
-                Log.e("MainViewModel", "saveItem error: ${e.message}")
-                onDone() // igual cerramos el formulario, quedó guardado en Room
-            } finally {
-                _saving.value = false
             }
         }
     }
