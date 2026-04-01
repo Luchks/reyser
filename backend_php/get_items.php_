@@ -17,13 +17,6 @@
 
     $items = [];
 
-    function normalizeEstadoPago($v) {
-        $s = strtoupper(trim((string)$v));
-        if ($s === "" || $s === "0") return "PENDIENTE PAGO";
-        $valid = ["PAGADO", "PENDIENTE PAGO", "CREDITO AGENCIA", "SERVICIO GRATUITO"];
-        return in_array($s, $valid, true) ? $s : "PENDIENTE PAGO";
-    }
-
     while ($row = $result->fetch_assoc()) {
 
         // ─────────────────────────────────────────────
@@ -69,9 +62,6 @@
             $row['comprobantePago'] = $row['ComprobantePago'];
             unset($row['ComprobantePago']);
         }
-
-        // Normalizar estadoPago: nunca devolver '0' o vacío
-        $row['estadoPago'] = normalizeEstadoPago($row['estadoPago'] ?? '');
 
         $items[] = $row;
     }

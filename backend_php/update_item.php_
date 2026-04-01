@@ -73,10 +73,7 @@
     $cantidadPasajero = $data['cantidadPasajero'] ?? '';
     $tipoServicio = $data['tipoServicio'] ?? '';
     $observacionGeneral = $data['observacionGeneral'] ?? '';
-    // Normalizar estadoPago: nunca guardar '0' o vacío en MySQL
-    $rawEstadoPago = strtoupper(trim($data['estadoPago'] ?? ''));
-    $validEstados  = ['PAGADO', 'PENDIENTE PAGO', 'CREDITO AGENCIA', 'SERVICIO GRATUITO'];
-    $estadoPago    = in_array($rawEstadoPago, $validEstados, true) ? $rawEstadoPago : 'PENDIENTE PAGO';
+    $estadoPago = $data['estadoPago'] ?? '';
     // CAMBIO CLAVE: Capturar el estado enviado por la App (BORRADOR o COMPLETADO)
     $estadoReserva = $data['estadoReserva'] ?? 'BORRADOR'; 
     $comprobantePago = $data['comprobantePago'] ?? '';
