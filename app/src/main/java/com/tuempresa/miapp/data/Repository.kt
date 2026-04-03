@@ -36,7 +36,7 @@ class Repository(
     private val dao: ItemDao = db.itemDao()
 
     // ─────────────────────────────────────────────────────────────────────────
-    // OBSERVACIÓN REACTIVA (siempre desde Room, Room se llena desde servidor)
+    // OBSERVACIÓN REACTIVA
     // ─────────────────────────────────────────────────────────────────────────
 
     fun observeItems(): Flow<List<Item>> =
@@ -51,7 +51,14 @@ class Repository(
 
     /**
      * Baja los items activos del servidor y los guarda en Room (SYNCED).
-     * No toca los registros que están PENDING_* para no pisarlos.
+     *
+     * FIX BUG 2 — Antes hacía upsertAll() de todo sin distinción, lo que
+     * podía pisar registros PENDING_CREATE creados offline en otro celular
+     * (que tienen serverId = 0) causando duplicados.
+     *
+     * Ahora filtra los items del servidor cuyo codigoReserva coincide con
+     * algún PENDING_CREATE local, y los excluye del upsert hasta que ese
+     * pendiente sea sincronizado y reciba su serverId real.
      */
     suspend fun syncItemsFromServer() {
         try {
@@ -59,17 +66,34 @@ class Repository(
             val entities = serverItems.map {
                 ItemEntity.fromItem(it, SyncStatus.SYNCED).copy(flagActivo = 1)
             }
-            dao.upsertAll(entities)
+
+            // Obtener los codigoReserva de registros PENDING_CREATE locales.
+            // Estos son registros creados offline que aún no tienen serverId.
+            // No se deben pisar con datos del servidor hasta que se sincronicen.
+            val pendingCodigos = dao.getPendingSync()
+                .filter { it.syncStatus == SyncStatus.PENDING_CREATE.name }
+                .map { it.codigoReserva }
+                .toSet()
+
+            // Solo hacer upsert de los registros del servidor que no colisionen
+            // con un PENDING_CREATE local sin sincronizar
+            val safeToUpsert = if (pendingCodigos.isEmpty()) {
+                entities
+            } else {
+                entities.filter { it.codigoReserva !in pendingCodigos }
+            }
+
+            dao.upsertAll(safeToUpsert)
 
             // Limpiar del Room los SYNCED que ya no existen en el servidor
             val serverIds = entities.map { it.serverId }
             if (serverIds.isNotEmpty()) {
                 dao.deleteOldItemsNotInServer(serverIds)
             }
-            Log.d("Repository", "syncItemsFromServer OK — ${entities.size} items")
+
+            Log.d("Repository", "syncItemsFromServer OK — ${entities.size} items (${entities.size - safeToUpsert.size} omitidos por PENDING_CREATE local)")
         } catch (e: Exception) {
             Log.e("Repository", "syncItemsFromServer error: ${e.message}")
-            // Sin internet → Room mantiene lo que tiene (pendientes + última copia)
         }
     }
 
@@ -114,10 +138,6 @@ class Repository(
     // SINCRONIZACIÓN: Room (pendientes) → servidor
     // ─────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Recorre todos los registros PENDING_* en Room y los envía al servidor.
-     * Llamado al reconectar y en el SyncWorker de background.
-     */
     suspend fun syncPendingOperations() {
         val pending = dao.getPendingSync()
         if (pending.isEmpty()) {
@@ -132,10 +152,9 @@ class Repository(
                     SyncStatus.PENDING_CREATE -> handlePendingCreate(entity)
                     SyncStatus.PENDING_UPDATE -> handlePendingUpdate(entity)
                     SyncStatus.PENDING_DELETE -> handlePendingDelete(entity)
-                    SyncStatus.SYNCED         -> Unit // no debería llegar aquí
+                    SyncStatus.SYNCED         -> Unit
                 }
             } catch (e: Exception) {
-                // Si falla uno, continúa con el siguiente. Se reintentará la próxima vez.
                 Log.e("Repository", "Fallo sincronizando roomId=${entity.roomId}: ${e.message}")
             }
         }
@@ -150,7 +169,6 @@ class Repository(
                 Log.d("Repository", "PENDING_CREATE OK, serverId=$serverId")
             }
         } catch (e: java.io.IOException) {
-            // Sin internet: el registro sigue PENDING en Room, se reintenta al reconectar
             Log.w("Repository", "PENDING_CREATE sin internet: ${e.message}")
         }
     }
@@ -188,22 +206,14 @@ class Repository(
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // CRUD: lógica offline-first simple
-    //
-    // Patrón para todas las operaciones:
-    //   1. Guardar en Room con syncStatus = PENDING_*  (operación local inmediata)
-    //   2. Intentar enviar al servidor
-    //      - OK  → marcar como SYNCED en Room
-    //      - FAIL (sin internet) → quedó como PENDING, se reintentará al reconectar
+    // CRUD: lógica offline-first
     // ─────────────────────────────────────────────────────────────────────────
 
     suspend fun createItem(item: Item): retrofit2.Response<GenericResponse>? {
-        // 1. Guardar en Room como pendiente (visible en UI inmediatamente)
         val entity = ItemEntity.fromItem(item, SyncStatus.PENDING_CREATE)
         val roomId = dao.upsert(entity).toInt()
         Log.d("Repository", "createItem → guardado en Room con roomId=$roomId")
 
-        // 2. Intentar enviar al servidor
         return try {
             val response = api.createItem(item)
             if (response.isSuccessful && response.body()?.success == true) {
@@ -216,12 +226,11 @@ class Repository(
             response
         } catch (e: Exception) {
             Log.w("Repository", "createItem → sin internet, quedó como PENDING_CREATE")
-            null // La UI maneja null como "guardado offline"
+            null
         }
     }
 
     suspend fun updateItem(item: Item): retrofit2.Response<GenericResponse>? {
-        // 1. Actualizar en Room como pendiente
         val existing = dao.getByServerId(item.id)
         val entity = ItemEntity.fromItem(
             item,
@@ -231,7 +240,6 @@ class Repository(
         dao.upsert(entity)
         Log.d("Repository", "updateItem → actualizado en Room, serverId=${item.id}")
 
-        // 2. Intentar enviar al servidor
         return try {
             val response = api.updateItem(item)
             if (response.isSuccessful && response.body()?.success == true) {
@@ -247,10 +255,8 @@ class Repository(
     }
 
     suspend fun softDelete(serverId: Int) {
-        // 1. Marcar como eliminado en Room (desaparece de la lista activa)
         dao.softDeleteByServerId(serverId)
 
-        // 2. Intentar enviar al servidor
         try {
             val response = api.softDelete(serverId)
             if (response.isSuccessful && response.body()?.success == true) {
@@ -263,10 +269,8 @@ class Repository(
     }
 
     suspend fun restore(serverId: Int) {
-        // 1. Restaurar en Room
         dao.restoreByServerId(serverId)
 
-        // 2. Intentar en servidor
         try {
             val response = api.restore(serverId)
             if (response.isSuccessful && response.body()?.success == true) {
@@ -278,11 +282,6 @@ class Repository(
         }
     }
 
-    /**
-     * hardDelete requiere internet para eliminar en MySQL.
-     * Sin internet: lanza excepcion controlada (NO crashea la app).
-     * La UI debe mostrar un mensaje al usuario.
-     */
     suspend fun hardDelete(serverId: Int) {
         try {
             val response = api.hardDelete(serverId)
@@ -299,10 +298,8 @@ class Repository(
     }
 
     suspend fun updateEstadoPago(serverId: Int, estadoPago: String): retrofit2.Response<GenericResponse>? {
-        // 1. Actualizar en Room
         dao.updateEstadoPago(serverId, estadoPago)
 
-        // 2. Intentar en servidor
         return try {
             val response = api.updateEstadoPago(UpdateEstadoPagoRequest(serverId, estadoPago))
             if (response.isSuccessful && response.body()?.success == true) {
@@ -317,22 +314,14 @@ class Repository(
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // GUARDADO OPTIMISTA: Room primero, servidor después (sin bloquear UI)
+    // GUARDADO OPTIMISTA: Room primero, servidor después
     // ─────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Guarda el item en Room INMEDIATAMENTE con syncStatus = PENDING.
-     * No toca el servidor. Devuelve el roomId generado.
-     * Llamado por saveItem() antes de llamar onDone() para que la UI
-     * reaccione al instante sin esperar respuesta de red.
-     */
     suspend fun saveToRoomImmediate(item: Item, currentItemId: Int): Long {
         return if (currentItemId == -1) {
-            // Reserva nueva
             val entity = ItemEntity.fromItem(item, SyncStatus.PENDING_CREATE)
             dao.upsert(entity)
         } else {
-            // Actualización de existente
             val existing = dao.getByServerId(currentItemId)
             val entity = ItemEntity.fromItem(
                 item,
@@ -345,7 +334,15 @@ class Repository(
 
     /**
      * Intenta sincronizar una reserva NUEVA al servidor.
-     * Si falla (sin internet), el registro ya está en Room como PENDING_CREATE.
+     *
+     * FIX BUG 2 — La versión anterior buscaba el registro local con
+     * dao.getByServerId(0), que podía devolver cualquier PENDING_CREATE
+     * (no necesariamente el que acabábamos de guardar), y además nunca
+     * llamaba a dao.markSynced(), dejando el registro con serverId = 0
+     * para siempre y causando duplicados cuando otro celular sincronizaba.
+     *
+     * Ahora identifica el registro correcto por codigoReserva (único por
+     * diseño de negocio) y llama a markSynced() con el roomId preciso.
      */
     suspend fun syncNewItemToServer(item: Item): retrofit2.Response<GenericResponse>? {
         return try {
@@ -353,12 +350,15 @@ class Repository(
             if (response.isSuccessful && response.body()?.success == true) {
                 val serverId = response.body()?.id
                 if (serverId != null) {
-                    // Buscar el registro que acabamos de guardar en Room por codigoReserva
-                    // y actualizarlo con el serverId real
-                    val entity = dao.getByServerId(0) // buscar PENDING_CREATE reciente
-                    // Actualizar: markSynced necesita roomId
-                    // Buscamos por campos únicos
-                    Log.d("Repository", "syncNewItemToServer OK, serverId=$serverId")
+                    // Identificar el registro local por codigoReserva, que es
+                    // único y se genera antes del guardado → nunca es ambiguo
+                    val entity = dao.getByCodigoReserva(item.codigoReserva)
+                    if (entity != null) {
+                        dao.markSynced(entity.roomId, serverId)
+                        Log.d("Repository", "syncNewItemToServer OK — roomId=${entity.roomId} → serverId=$serverId")
+                    } else {
+                        Log.w("Repository", "syncNewItemToServer: no se encontró el registro local con codigoReserva=${item.codigoReserva}")
+                    }
                 }
             }
             response
@@ -368,10 +368,6 @@ class Repository(
         }
     }
 
-    /**
-     * Intenta sincronizar una reserva ACTUALIZADA al servidor.
-     * Si falla, el registro ya está en Room como PENDING_UPDATE.
-     */
     suspend fun syncUpdatedItemToServer(item: Item): retrofit2.Response<GenericResponse>? {
         return try {
             val response = api.updateItem(item)
@@ -387,10 +383,6 @@ class Repository(
         }
     }
 
-    /**
-     * Guarda un borrador en Room cuando la app se va a background.
-     * No intenta ir al servidor.
-     */
     suspend fun saveDraftToRoom(item: Item, currentItemId: Int) {
         if (currentItemId == -1) {
             val entity = ItemEntity.fromItem(item, SyncStatus.PENDING_CREATE)

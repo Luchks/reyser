@@ -1,5 +1,7 @@
 package com.tuempresa.miapp.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,9 +18,9 @@ import androidx.navigation.NavController
 import com.tuempresa.miapp.data.Item
 import com.tuempresa.miapp.ui.components.*
 import com.tuempresa.miapp.ui.state.AddEditItemEvent
-import com.tuempresa.miapp.ui.state.toPreviewItem
 import com.tuempresa.miapp.viewmodel.MainViewModel
 import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 
@@ -37,26 +39,28 @@ fun ItemReservationScreen(
     var mode by remember { mutableStateOf(if (itemId == -1) ReservationMode.EDIT else ReservationMode.VIEW) }
 
     val items by vm.items.collectAsState()
-    val _items = vm.items           // referencia al StateFlow para leer en LaunchedEffect
     val state by vm.addEditState.collectAsState()
     val saving by vm.saving.collectAsState()
 
-    // Función que ejecuta el guardado silencioso y luego navega atrás
     val saveAndGoBack: () -> Unit = {
         if (mode == ReservationMode.EDIT) vm.autoSaveDraft()
         navController.popBackStack()
     }
 
-    // Interceptar botón físico/gesto de "Atrás" del sistema
     BackHandler { saveAndGoBack() }
 
-    // Cargar datos solo una vez al abrir la pantalla (key = itemId).
-    // NO usar "items" como key: Room actualiza "items" frecuentemente
-    // y provocaría que loadItemForEdit se llame de nuevo, pisando los
-    // cambios que el usuario esté escribiendo en ese momento.
+    // FIX BUG 1 — Reemplaza DisposableEffect(itemId) que leía vm.items.value
+    // como snapshot (podía estar vacío) y no garantizaba reset al volver a -1.
+    //
+    // LaunchedEffect(itemId) se re-ejecuta cada vez que cambia itemId:
+    //   • itemId == -1 → prepareForm hace reset ATÓMICO e INMEDIATO del estado.
+    //   • itemId  > 0  → prepareForm carga el item; si los items aún no llegaron
+    //                    espera la primera emisión no vacía del Flow internamente.
+    //
+    // De esta forma nunca se muestra un formulario con datos residuales del
+    // item que se estaba editando antes.
     LaunchedEffect(itemId) {
-        if (_items.value.isEmpty()) vm.fetchItems()
-        vm.loadItemForEdit(itemId, vm.items.value)
+        vm.prepareForm(itemId)
     }
 
     Scaffold(
@@ -79,39 +83,20 @@ fun ItemReservationScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-                when (mode) {
+            when (mode) {
                 ReservationMode.VIEW -> {
-                    // Buscar el item por serverId primero, luego por roomId
-                    // Para reservas nuevas guardadas offline, el id puede ser 0
-                    // hasta que el servidor responda — mostramos el state local como fallback
+                    // Para reservas nuevas (itemId == -1), state.itemId se actualiza
+                    // después del guardado con el serverId real devuelto por el servidor.
                     val effectiveId = if (itemId == -1) state.itemId else itemId
                     val item = items.find { it.id == effectiveId }
 
-                    when {
-                        item != null -> {
-                            // Caso normal: item encontrado en la lista (viene de Room/servidor)
-                            ReservationReport(
-                                item = item,
-                                onEdit = { mode = ReservationMode.EDIT }
-                            )
-                        }
-                        state.nombrePrincipal.isNotBlank() -> {
-                            // Guardado optimista: el item aún no llegó a items (Room aún
-                            // está procesando), pero tenemos el estado local — lo mostramos
-                            // directamente desde el state del formulario sin esperar a Room
-                            ReservationReport(
-                                item = state.toPreviewItem(),
-                                onEdit = { mode = ReservationMode.EDIT }
-                            )
-                        }
-                        itemId == -1 -> {
-                            // Reserva nueva sin datos — volver al listado
-                            LaunchedEffect(Unit) { navController.popBackStack() }
-                        }
-                        else -> {
-                            // Cargando item existente del servidor
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
+                    if (item != null) {
+                        ReservationReport(
+                            item = item,
+                            onEdit = { mode = ReservationMode.EDIT }
+                        )
+                    } else {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
                 }
 
@@ -255,9 +240,8 @@ private fun ReservationReport(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp) // Más espacio entre secciones
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Cabecera con el Código de Reserva resaltado
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier.fillMaxWidth()
@@ -275,35 +259,30 @@ private fun ReservationReport(
             }
         }
 
-        // --- SECCIÓN: DATOS DE LA RESERVA ---
         InfoSection(title = "DATOS DE LA RESERVA", icon = Icons.Default.Info) {
             InfoRow(Icons.Default.Tour, "Servicio", item.nombreTour)
             InfoRow(Icons.Default.Category, "Tipo", "${item.tipoServicio} (${item.tipoCliente})")
             InfoRow(Icons.Default.Event, "Fecha y Turno", "${item.fecha} - ${item.turno}")
             InfoRow(Icons.Default.Schedule, "Inicio/Duración", "${item.horaInicio} (${item.duracion})")
             InfoRow(Icons.Default.LocationOn, "Hotel/Dirección", item.hotelDireccion)
-            InfoRow(Icons.Default.SupportAgent, "Agente", "${item.agente} / ${item.waAgente}")
+            PhoneRow(Icons.Default.SupportAgent, "Agente", item.agente, item.countryCodewaAgente, item.waAgente)
         }
 
-        // --- SECCIÓN: PASAJEROS ---
         InfoSection(title = "PASAJEROS", icon = Icons.Default.Groups) {
             InfoRow(Icons.Default.Person, "Principal", item.nombrePrincipal)
             InfoRow(Icons.Default.Badge, "Pasaporte", item.pasaporteID)
-            InfoRow(Icons.Default.Phone, "WhatsApp", "${item.countryCodewhatsapp}-${item.whatsapp}")
+            PhoneRow(Icons.Default.Phone, "WhatsApp", "", item.countryCodewhatsapp, item.whatsapp)
             InfoRow(Icons.Default.Public, "Nacionalidad", item.pais)
             InfoRow(Icons.Default.Translate, "Idioma", item.idioma)
-            
-            // CAMBIO AQUÍ: Usamos joinToString para convertir la lista en un solo String
             if (item.pasajerosAdicionales.isNotEmpty()) {
                 InfoRow(
-                    icon = Icons.Default.List, 
-                    label = "Adicionales", 
+                    icon = Icons.Default.List,
+                    label = "Adicionales",
                     value = item.pasajerosAdicionales.joinToString("\n")
-                    )
-                }
-        } 
-          
-        // --- SECCIÓN: PAGO ---
+                )
+            }
+        }
+
         InfoSection(title = "PAGO", icon = Icons.Default.Payments) {
             InfoRow(Icons.Default.AirlineSeatReclineNormal, "pasajeros", item.cantidadPasajero)
             InfoRow(Icons.Default.AttachMoney, "Precio", item.precioPorPersona.toString())
@@ -320,13 +299,11 @@ private fun ReservationReport(
             InfoRow(Icons.Default.CreditCard, "Método", item.tipoPago)
         }
 
-        // --- SECCIÓN: PERSONAL ---
         InfoSection(title = "PERSONAL ASIGNADO", icon = Icons.Default.AssignmentInd) {
-            InfoRow(Icons.Default.DirectionsCar, "Driver", "${item.driver} (${item.countryCodewaDriver}-${item.waDriver})")
-            InfoRow(Icons.Default.RecordVoiceOver, "Guía", "${item.guia} (${item.countryCodewaGuia}-${item.waGuia})")
+            PhoneRow(Icons.Default.DirectionsCar, "Driver", item.driver, item.countryCodewaDriver, item.waDriver)
+            PhoneRow(Icons.Default.RecordVoiceOver, "Guía", item.guia, item.countryCodewaGuia, item.waGuia)
         }
 
-        // --- OBSERVACIONES (Si existen) ---
         if (item.observacion.isNotBlank() || item.observacionGeneral.isNotBlank()) {
             InfoSection(title = "OBSERVACIONES", icon = Icons.Default.Notes) {
                 if (item.observacion.isNotBlank()) Text("Internas: ${item.observacion}", style = MaterialTheme.typography.bodyMedium)
@@ -348,7 +325,7 @@ private fun ReservationReport(
     }
 }
 
-// --- COMPONENTES AUXILIARES PARA MANTENER EL CÓDIGO LIMPIO ---
+// --- COMPONENTES AUXILIARES ---
 
 @Composable
 private fun InfoSection(title: String, icon: ImageVector, content: @Composable ColumnScope.() -> Unit) {
@@ -376,6 +353,71 @@ private fun InfoRow(icon: ImageVector, label: String, value: String) {
         Column {
             Text(text = label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(text = value, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+        }
+    }
+}
+
+@Composable
+private fun PhoneRow(
+    icon: ImageVector,
+    label: String,
+    nombre: String,
+    code: String,
+    numero: String
+) {
+    val context = LocalContext.current
+    val numeroCompleto = "${code.trim()}${numero.trim()}".filter { it.isDigit() || it == '+' }
+    val tieneNumero = numero.isNotBlank()
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.width(12.dp))
+
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (nombre.isNotBlank()) {
+                Text(
+                    text = nombre,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+            if (tieneNumero) {
+                Text(
+                    text = "${code.trim()} ${numero.trim()}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        if (tieneNumero) {
+            IconButton(
+                onClick = {
+                    val intent = Intent(Intent.ACTION_DIAL).apply {
+                        data = Uri.parse("tel:$numeroCompleto")
+                    }
+                    context.startActivity(intent)
+                }
+            ) {
+                Icon(
+                    Icons.Default.Call,
+                    contentDescription = "Llamar a $label",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     }
 }

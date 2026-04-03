@@ -50,7 +50,14 @@ public final class Repository {
     
     /**
      * Baja los items activos del servidor y los guarda en Room (SYNCED).
-     * No toca los registros que están PENDING_* para no pisarlos.
+     *
+     * FIX BUG 2 — Antes hacía upsertAll() de todo sin distinción, lo que
+     * podía pisar registros PENDING_CREATE creados offline en otro celular
+     * (que tienen serverId = 0) causando duplicados.
+     *
+     * Ahora filtra los items del servidor cuyo codigoReserva coincide con
+     * algún PENDING_CREATE local, y los excluye del upsert hasta que ese
+     * pendiente sea sincronizado y reciba su serverId real.
      */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object syncItemsFromServer(@org.jetbrains.annotations.NotNull()
@@ -73,10 +80,6 @@ public final class Repository {
         return null;
     }
     
-    /**
-     * Recorre todos los registros PENDING_* en Room y los envía al servidor.
-     * Llamado al reconectar y en el SyncWorker de background.
-     */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object syncPendingOperations(@org.jetbrains.annotations.NotNull()
     kotlin.coroutines.Continuation<? super kotlin.Unit> $completion) {
@@ -121,11 +124,6 @@ public final class Repository {
         return null;
     }
     
-    /**
-     * hardDelete requiere internet para eliminar en MySQL.
-     * Sin internet: lanza excepcion controlada (NO crashea la app).
-     * La UI debe mostrar un mensaje al usuario.
-     */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object hardDelete(int serverId, @org.jetbrains.annotations.NotNull()
     kotlin.coroutines.Continuation<? super kotlin.Unit> $completion) {
@@ -139,12 +137,6 @@ public final class Repository {
         return null;
     }
     
-    /**
-     * Guarda el item en Room INMEDIATAMENTE con syncStatus = PENDING.
-     * No toca el servidor. Devuelve el roomId generado.
-     * Llamado por saveItem() antes de llamar onDone() para que la UI
-     * reaccione al instante sin esperar respuesta de red.
-     */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object saveToRoomImmediate(@org.jetbrains.annotations.NotNull()
     com.tuempresa.miapp.data.Item item, int currentItemId, @org.jetbrains.annotations.NotNull()
@@ -154,7 +146,15 @@ public final class Repository {
     
     /**
      * Intenta sincronizar una reserva NUEVA al servidor.
-     * Si falla (sin internet), el registro ya está en Room como PENDING_CREATE.
+     *
+     * FIX BUG 2 — La versión anterior buscaba el registro local con
+     * dao.getByServerId(0), que podía devolver cualquier PENDING_CREATE
+     * (no necesariamente el que acabábamos de guardar), y además nunca
+     * llamaba a dao.markSynced(), dejando el registro con serverId = 0
+     * para siempre y causando duplicados cuando otro celular sincronizaba.
+     *
+     * Ahora identifica el registro correcto por codigoReserva (único por
+     * diseño de negocio) y llama a markSynced() con el roomId preciso.
      */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object syncNewItemToServer(@org.jetbrains.annotations.NotNull()
@@ -163,10 +163,6 @@ public final class Repository {
         return null;
     }
     
-    /**
-     * Intenta sincronizar una reserva ACTUALIZADA al servidor.
-     * Si falla, el registro ya está en Room como PENDING_UPDATE.
-     */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object syncUpdatedItemToServer(@org.jetbrains.annotations.NotNull()
     com.tuempresa.miapp.data.Item item, @org.jetbrains.annotations.NotNull()
@@ -174,10 +170,6 @@ public final class Repository {
         return null;
     }
     
-    /**
-     * Guarda un borrador en Room cuando la app se va a background.
-     * No intenta ir al servidor.
-     */
     @org.jetbrains.annotations.Nullable()
     public final java.lang.Object saveDraftToRoom(@org.jetbrains.annotations.NotNull()
     com.tuempresa.miapp.data.Item item, int currentItemId, @org.jetbrains.annotations.NotNull()

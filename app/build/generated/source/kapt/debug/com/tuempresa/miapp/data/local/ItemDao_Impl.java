@@ -1966,6 +1966,335 @@ public final class ItemDao_Impl implements ItemDao {
   }
 
   @Override
+  public Object getByCodigoReserva(final String codigo,
+      final Continuation<? super ItemEntity> $completion) {
+    final String _sql = "SELECT * FROM items WHERE codigoReserva = ? LIMIT 1";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (codigo == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, codigo);
+    }
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<ItemEntity>() {
+      @Override
+      @Nullable
+      public ItemEntity call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfRoomId = CursorUtil.getColumnIndexOrThrow(_cursor, "roomId");
+          final int _cursorIndexOfServerId = CursorUtil.getColumnIndexOrThrow(_cursor, "serverId");
+          final int _cursorIndexOfSyncStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "syncStatus");
+          final int _cursorIndexOfFlagActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "flagActivo");
+          final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+          final int _cursorIndexOfDescription = CursorUtil.getColumnIndexOrThrow(_cursor, "description");
+          final int _cursorIndexOfCodigoReserva = CursorUtil.getColumnIndexOrThrow(_cursor, "codigoReserva");
+          final int _cursorIndexOfNombreTour = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreTour");
+          final int _cursorIndexOfTipoCliente = CursorUtil.getColumnIndexOrThrow(_cursor, "tipoCliente");
+          final int _cursorIndexOfFecha = CursorUtil.getColumnIndexOrThrow(_cursor, "fecha");
+          final int _cursorIndexOfHoraInicio = CursorUtil.getColumnIndexOrThrow(_cursor, "horaInicio");
+          final int _cursorIndexOfTurno = CursorUtil.getColumnIndexOrThrow(_cursor, "turno");
+          final int _cursorIndexOfHotelDireccion = CursorUtil.getColumnIndexOrThrow(_cursor, "hotelDireccion");
+          final int _cursorIndexOfDuracion = CursorUtil.getColumnIndexOrThrow(_cursor, "duracion");
+          final int _cursorIndexOfNombrePrincipal = CursorUtil.getColumnIndexOrThrow(_cursor, "nombrePrincipal");
+          final int _cursorIndexOfPasajerosAdicionales = CursorUtil.getColumnIndexOrThrow(_cursor, "pasajerosAdicionales");
+          final int _cursorIndexOfPasaporteID = CursorUtil.getColumnIndexOrThrow(_cursor, "pasaporteID");
+          final int _cursorIndexOfCountryCodewhatsapp = CursorUtil.getColumnIndexOrThrow(_cursor, "countryCodewhatsapp");
+          final int _cursorIndexOfWhatsapp = CursorUtil.getColumnIndexOrThrow(_cursor, "whatsapp");
+          final int _cursorIndexOfCorreo = CursorUtil.getColumnIndexOrThrow(_cursor, "correo");
+          final int _cursorIndexOfHabitacion = CursorUtil.getColumnIndexOrThrow(_cursor, "habitacion");
+          final int _cursorIndexOfIdioma = CursorUtil.getColumnIndexOrThrow(_cursor, "idioma");
+          final int _cursorIndexOfPais = CursorUtil.getColumnIndexOrThrow(_cursor, "pais");
+          final int _cursorIndexOfTipoPago = CursorUtil.getColumnIndexOrThrow(_cursor, "tipoPago");
+          final int _cursorIndexOfPrecioPorPersona = CursorUtil.getColumnIndexOrThrow(_cursor, "precioPorPersona");
+          final int _cursorIndexOfPrecioTotal = CursorUtil.getColumnIndexOrThrow(_cursor, "precioTotal");
+          final int _cursorIndexOfPrecioComisionable = CursorUtil.getColumnIndexOrThrow(_cursor, "precioComisionable");
+          final int _cursorIndexOfTotalComision = CursorUtil.getColumnIndexOrThrow(_cursor, "totalComision");
+          final int _cursorIndexOfAgente = CursorUtil.getColumnIndexOrThrow(_cursor, "agente");
+          final int _cursorIndexOfCountryCodewaAgente = CursorUtil.getColumnIndexOrThrow(_cursor, "countryCodewaAgente");
+          final int _cursorIndexOfWaAgente = CursorUtil.getColumnIndexOrThrow(_cursor, "waAgente");
+          final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDriver = CursorUtil.getColumnIndexOrThrow(_cursor, "driver");
+          final int _cursorIndexOfCountryCodewaDriver = CursorUtil.getColumnIndexOrThrow(_cursor, "countryCodewaDriver");
+          final int _cursorIndexOfWaDriver = CursorUtil.getColumnIndexOrThrow(_cursor, "waDriver");
+          final int _cursorIndexOfGuia = CursorUtil.getColumnIndexOrThrow(_cursor, "guia");
+          final int _cursorIndexOfCountryCodewaGuia = CursorUtil.getColumnIndexOrThrow(_cursor, "countryCodewaGuia");
+          final int _cursorIndexOfWaGuia = CursorUtil.getColumnIndexOrThrow(_cursor, "waGuia");
+          final int _cursorIndexOfIdCalendar = CursorUtil.getColumnIndexOrThrow(_cursor, "id_calendar");
+          final int _cursorIndexOfIdMap = CursorUtil.getColumnIndexOrThrow(_cursor, "id_map");
+          final int _cursorIndexOfCantidadPasajero = CursorUtil.getColumnIndexOrThrow(_cursor, "cantidadPasajero");
+          final int _cursorIndexOfTipoServicio = CursorUtil.getColumnIndexOrThrow(_cursor, "tipoServicio");
+          final int _cursorIndexOfObservacionGeneral = CursorUtil.getColumnIndexOrThrow(_cursor, "observacionGeneral");
+          final int _cursorIndexOfEstadoPago = CursorUtil.getColumnIndexOrThrow(_cursor, "estadoPago");
+          final int _cursorIndexOfEstadoReserva = CursorUtil.getColumnIndexOrThrow(_cursor, "estadoReserva");
+          final int _cursorIndexOfComprobantePago = CursorUtil.getColumnIndexOrThrow(_cursor, "comprobantePago");
+          final ItemEntity _result;
+          if (_cursor.moveToFirst()) {
+            final int _tmpRoomId;
+            _tmpRoomId = _cursor.getInt(_cursorIndexOfRoomId);
+            final int _tmpServerId;
+            _tmpServerId = _cursor.getInt(_cursorIndexOfServerId);
+            final String _tmpSyncStatus;
+            if (_cursor.isNull(_cursorIndexOfSyncStatus)) {
+              _tmpSyncStatus = null;
+            } else {
+              _tmpSyncStatus = _cursor.getString(_cursorIndexOfSyncStatus);
+            }
+            final int _tmpFlagActivo;
+            _tmpFlagActivo = _cursor.getInt(_cursorIndexOfFlagActivo);
+            final String _tmpName;
+            if (_cursor.isNull(_cursorIndexOfName)) {
+              _tmpName = null;
+            } else {
+              _tmpName = _cursor.getString(_cursorIndexOfName);
+            }
+            final String _tmpDescription;
+            if (_cursor.isNull(_cursorIndexOfDescription)) {
+              _tmpDescription = null;
+            } else {
+              _tmpDescription = _cursor.getString(_cursorIndexOfDescription);
+            }
+            final String _tmpCodigoReserva;
+            if (_cursor.isNull(_cursorIndexOfCodigoReserva)) {
+              _tmpCodigoReserva = null;
+            } else {
+              _tmpCodigoReserva = _cursor.getString(_cursorIndexOfCodigoReserva);
+            }
+            final String _tmpNombreTour;
+            if (_cursor.isNull(_cursorIndexOfNombreTour)) {
+              _tmpNombreTour = null;
+            } else {
+              _tmpNombreTour = _cursor.getString(_cursorIndexOfNombreTour);
+            }
+            final String _tmpTipoCliente;
+            if (_cursor.isNull(_cursorIndexOfTipoCliente)) {
+              _tmpTipoCliente = null;
+            } else {
+              _tmpTipoCliente = _cursor.getString(_cursorIndexOfTipoCliente);
+            }
+            final String _tmpFecha;
+            if (_cursor.isNull(_cursorIndexOfFecha)) {
+              _tmpFecha = null;
+            } else {
+              _tmpFecha = _cursor.getString(_cursorIndexOfFecha);
+            }
+            final String _tmpHoraInicio;
+            if (_cursor.isNull(_cursorIndexOfHoraInicio)) {
+              _tmpHoraInicio = null;
+            } else {
+              _tmpHoraInicio = _cursor.getString(_cursorIndexOfHoraInicio);
+            }
+            final String _tmpTurno;
+            if (_cursor.isNull(_cursorIndexOfTurno)) {
+              _tmpTurno = null;
+            } else {
+              _tmpTurno = _cursor.getString(_cursorIndexOfTurno);
+            }
+            final String _tmpHotelDireccion;
+            if (_cursor.isNull(_cursorIndexOfHotelDireccion)) {
+              _tmpHotelDireccion = null;
+            } else {
+              _tmpHotelDireccion = _cursor.getString(_cursorIndexOfHotelDireccion);
+            }
+            final String _tmpDuracion;
+            if (_cursor.isNull(_cursorIndexOfDuracion)) {
+              _tmpDuracion = null;
+            } else {
+              _tmpDuracion = _cursor.getString(_cursorIndexOfDuracion);
+            }
+            final String _tmpNombrePrincipal;
+            if (_cursor.isNull(_cursorIndexOfNombrePrincipal)) {
+              _tmpNombrePrincipal = null;
+            } else {
+              _tmpNombrePrincipal = _cursor.getString(_cursorIndexOfNombrePrincipal);
+            }
+            final List<String> _tmpPasajerosAdicionales;
+            final String _tmp;
+            if (_cursor.isNull(_cursorIndexOfPasajerosAdicionales)) {
+              _tmp = null;
+            } else {
+              _tmp = _cursor.getString(_cursorIndexOfPasajerosAdicionales);
+            }
+            _tmpPasajerosAdicionales = __converters.toStringList(_tmp);
+            final String _tmpPasaporteID;
+            if (_cursor.isNull(_cursorIndexOfPasaporteID)) {
+              _tmpPasaporteID = null;
+            } else {
+              _tmpPasaporteID = _cursor.getString(_cursorIndexOfPasaporteID);
+            }
+            final String _tmpCountryCodewhatsapp;
+            if (_cursor.isNull(_cursorIndexOfCountryCodewhatsapp)) {
+              _tmpCountryCodewhatsapp = null;
+            } else {
+              _tmpCountryCodewhatsapp = _cursor.getString(_cursorIndexOfCountryCodewhatsapp);
+            }
+            final String _tmpWhatsapp;
+            if (_cursor.isNull(_cursorIndexOfWhatsapp)) {
+              _tmpWhatsapp = null;
+            } else {
+              _tmpWhatsapp = _cursor.getString(_cursorIndexOfWhatsapp);
+            }
+            final String _tmpCorreo;
+            if (_cursor.isNull(_cursorIndexOfCorreo)) {
+              _tmpCorreo = null;
+            } else {
+              _tmpCorreo = _cursor.getString(_cursorIndexOfCorreo);
+            }
+            final String _tmpHabitacion;
+            if (_cursor.isNull(_cursorIndexOfHabitacion)) {
+              _tmpHabitacion = null;
+            } else {
+              _tmpHabitacion = _cursor.getString(_cursorIndexOfHabitacion);
+            }
+            final String _tmpIdioma;
+            if (_cursor.isNull(_cursorIndexOfIdioma)) {
+              _tmpIdioma = null;
+            } else {
+              _tmpIdioma = _cursor.getString(_cursorIndexOfIdioma);
+            }
+            final String _tmpPais;
+            if (_cursor.isNull(_cursorIndexOfPais)) {
+              _tmpPais = null;
+            } else {
+              _tmpPais = _cursor.getString(_cursorIndexOfPais);
+            }
+            final String _tmpTipoPago;
+            if (_cursor.isNull(_cursorIndexOfTipoPago)) {
+              _tmpTipoPago = null;
+            } else {
+              _tmpTipoPago = _cursor.getString(_cursorIndexOfTipoPago);
+            }
+            final int _tmpPrecioPorPersona;
+            _tmpPrecioPorPersona = _cursor.getInt(_cursorIndexOfPrecioPorPersona);
+            final int _tmpPrecioTotal;
+            _tmpPrecioTotal = _cursor.getInt(_cursorIndexOfPrecioTotal);
+            final int _tmpPrecioComisionable;
+            _tmpPrecioComisionable = _cursor.getInt(_cursorIndexOfPrecioComisionable);
+            final int _tmpTotalComision;
+            _tmpTotalComision = _cursor.getInt(_cursorIndexOfTotalComision);
+            final String _tmpAgente;
+            if (_cursor.isNull(_cursorIndexOfAgente)) {
+              _tmpAgente = null;
+            } else {
+              _tmpAgente = _cursor.getString(_cursorIndexOfAgente);
+            }
+            final String _tmpCountryCodewaAgente;
+            if (_cursor.isNull(_cursorIndexOfCountryCodewaAgente)) {
+              _tmpCountryCodewaAgente = null;
+            } else {
+              _tmpCountryCodewaAgente = _cursor.getString(_cursorIndexOfCountryCodewaAgente);
+            }
+            final String _tmpWaAgente;
+            if (_cursor.isNull(_cursorIndexOfWaAgente)) {
+              _tmpWaAgente = null;
+            } else {
+              _tmpWaAgente = _cursor.getString(_cursorIndexOfWaAgente);
+            }
+            final String _tmpObservacion;
+            if (_cursor.isNull(_cursorIndexOfObservacion)) {
+              _tmpObservacion = null;
+            } else {
+              _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
+            }
+            final String _tmpDriver;
+            if (_cursor.isNull(_cursorIndexOfDriver)) {
+              _tmpDriver = null;
+            } else {
+              _tmpDriver = _cursor.getString(_cursorIndexOfDriver);
+            }
+            final String _tmpCountryCodewaDriver;
+            if (_cursor.isNull(_cursorIndexOfCountryCodewaDriver)) {
+              _tmpCountryCodewaDriver = null;
+            } else {
+              _tmpCountryCodewaDriver = _cursor.getString(_cursorIndexOfCountryCodewaDriver);
+            }
+            final String _tmpWaDriver;
+            if (_cursor.isNull(_cursorIndexOfWaDriver)) {
+              _tmpWaDriver = null;
+            } else {
+              _tmpWaDriver = _cursor.getString(_cursorIndexOfWaDriver);
+            }
+            final String _tmpGuia;
+            if (_cursor.isNull(_cursorIndexOfGuia)) {
+              _tmpGuia = null;
+            } else {
+              _tmpGuia = _cursor.getString(_cursorIndexOfGuia);
+            }
+            final String _tmpCountryCodewaGuia;
+            if (_cursor.isNull(_cursorIndexOfCountryCodewaGuia)) {
+              _tmpCountryCodewaGuia = null;
+            } else {
+              _tmpCountryCodewaGuia = _cursor.getString(_cursorIndexOfCountryCodewaGuia);
+            }
+            final String _tmpWaGuia;
+            if (_cursor.isNull(_cursorIndexOfWaGuia)) {
+              _tmpWaGuia = null;
+            } else {
+              _tmpWaGuia = _cursor.getString(_cursorIndexOfWaGuia);
+            }
+            final String _tmpId_calendar;
+            if (_cursor.isNull(_cursorIndexOfIdCalendar)) {
+              _tmpId_calendar = null;
+            } else {
+              _tmpId_calendar = _cursor.getString(_cursorIndexOfIdCalendar);
+            }
+            final String _tmpId_map;
+            if (_cursor.isNull(_cursorIndexOfIdMap)) {
+              _tmpId_map = null;
+            } else {
+              _tmpId_map = _cursor.getString(_cursorIndexOfIdMap);
+            }
+            final String _tmpCantidadPasajero;
+            if (_cursor.isNull(_cursorIndexOfCantidadPasajero)) {
+              _tmpCantidadPasajero = null;
+            } else {
+              _tmpCantidadPasajero = _cursor.getString(_cursorIndexOfCantidadPasajero);
+            }
+            final String _tmpTipoServicio;
+            if (_cursor.isNull(_cursorIndexOfTipoServicio)) {
+              _tmpTipoServicio = null;
+            } else {
+              _tmpTipoServicio = _cursor.getString(_cursorIndexOfTipoServicio);
+            }
+            final String _tmpObservacionGeneral;
+            if (_cursor.isNull(_cursorIndexOfObservacionGeneral)) {
+              _tmpObservacionGeneral = null;
+            } else {
+              _tmpObservacionGeneral = _cursor.getString(_cursorIndexOfObservacionGeneral);
+            }
+            final String _tmpEstadoPago;
+            if (_cursor.isNull(_cursorIndexOfEstadoPago)) {
+              _tmpEstadoPago = null;
+            } else {
+              _tmpEstadoPago = _cursor.getString(_cursorIndexOfEstadoPago);
+            }
+            final String _tmpEstadoReserva;
+            if (_cursor.isNull(_cursorIndexOfEstadoReserva)) {
+              _tmpEstadoReserva = null;
+            } else {
+              _tmpEstadoReserva = _cursor.getString(_cursorIndexOfEstadoReserva);
+            }
+            final String _tmpComprobantePago;
+            if (_cursor.isNull(_cursorIndexOfComprobantePago)) {
+              _tmpComprobantePago = null;
+            } else {
+              _tmpComprobantePago = _cursor.getString(_cursorIndexOfComprobantePago);
+            }
+            _result = new ItemEntity(_tmpRoomId,_tmpServerId,_tmpSyncStatus,_tmpFlagActivo,_tmpName,_tmpDescription,_tmpCodigoReserva,_tmpNombreTour,_tmpTipoCliente,_tmpFecha,_tmpHoraInicio,_tmpTurno,_tmpHotelDireccion,_tmpDuracion,_tmpNombrePrincipal,_tmpPasajerosAdicionales,_tmpPasaporteID,_tmpCountryCodewhatsapp,_tmpWhatsapp,_tmpCorreo,_tmpHabitacion,_tmpIdioma,_tmpPais,_tmpTipoPago,_tmpPrecioPorPersona,_tmpPrecioTotal,_tmpPrecioComisionable,_tmpTotalComision,_tmpAgente,_tmpCountryCodewaAgente,_tmpWaAgente,_tmpObservacion,_tmpDriver,_tmpCountryCodewaDriver,_tmpWaDriver,_tmpGuia,_tmpCountryCodewaGuia,_tmpWaGuia,_tmpId_calendar,_tmpId_map,_tmpCantidadPasajero,_tmpTipoServicio,_tmpObservacionGeneral,_tmpEstadoPago,_tmpEstadoReserva,_tmpComprobantePago);
+          } else {
+            _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
   public Object getPendingSync(final Continuation<? super List<ItemEntity>> $completion) {
     final String _sql = "SELECT * FROM items WHERE syncStatus != 'SYNCED'";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
