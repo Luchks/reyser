@@ -1,0 +1,16 @@
+# Secretos
+backend_php/credentials.json
+.env
+
+# Android / Java / Gradle
+.gradle/
+build/
+*.class
+*.log
+
+# IDEs
+.idea/
+*.iml
+
+# OS
+.DS_Store
